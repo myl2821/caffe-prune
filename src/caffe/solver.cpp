@@ -5,7 +5,7 @@
 
 #include "caffe/solver.hpp"
 #include "caffe/util/format.hpp"
-#include "caffe/util/hdf5.hpp"
+// #include "caffe/util/hdf5.hpp"
 #include "caffe/util/io.hpp"
 #include "caffe/util/upgrade_proto.hpp"
 
@@ -403,17 +403,7 @@ template <typename Dtype>
 void Solver<Dtype>::Snapshot() {
   CHECK(Caffe::root_solver());
   string model_filename;
-  switch (param_.snapshot_format()) {
-  case caffe::SolverParameter_SnapshotFormat_BINARYPROTO:
-    model_filename = SnapshotToBinaryProto();
-    break;
-  case caffe::SolverParameter_SnapshotFormat_HDF5:
-    model_filename = SnapshotToHDF5();
-    break;
-  default:
-    LOG(FATAL) << "Unsupported snapshot format.";
-  }
-
+  model_filename = SnapshotToBinaryProto();
   SnapshotSolverState(model_filename);
 }
 
@@ -451,6 +441,7 @@ string Solver<Dtype>::SnapshotToBinaryProto() {
   return model_filename;
 }
 
+#if 0
 template <typename Dtype>
 string Solver<Dtype>::SnapshotToHDF5() {
   string model_filename = SnapshotFilename(".caffemodel.h5");
@@ -458,16 +449,12 @@ string Solver<Dtype>::SnapshotToHDF5() {
   net_->ToHDF5(model_filename, param_.snapshot_diff());
   return model_filename;
 }
+#endif
 
 template <typename Dtype>
 void Solver<Dtype>::Restore(const char* state_file) {
   string state_filename(state_file);
-  if (state_filename.size() >= 3 &&
-      state_filename.compare(state_filename.size() - 3, 3, ".h5") == 0) {
-    RestoreSolverStateFromHDF5(state_filename);
-  } else {
-    RestoreSolverStateFromBinaryProto(state_filename);
-  }
+  RestoreSolverStateFromBinaryProto(state_filename);
 }
 
 template <typename Dtype>

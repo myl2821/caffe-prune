@@ -1411,15 +1411,6 @@ TEST_F(NetUpgradeTest, TestAllParams) {
       "} "
       "layers { "
       "  layer { "
-      "    name: 'hdf5data' "
-      "    type: 'hdf5_data' "
-      "    source: '/my/hdf5/data' "
-      "    batchsize: 256 "
-      "  } "
-      "  top: 'hdf5data' "
-      "} "
-      "layers { "
-      "  layer { "
       "    name: 'conv1' "
       "    type: 'conv' "
       "    num_output: 96 "
@@ -1560,15 +1551,6 @@ TEST_F(NetUpgradeTest, TestAllParams) {
       "} "
       "layers { "
       "  layer { "
-      "    name: 'hdf5_output' "
-      "    type: 'hdf5_output' "
-      "    hdf5_output_param { "
-      "      file_name: '/my/hdf5/output/file' "
-      "    } "
-      "  } "
-      "} "
-      "layers { "
-      "  layer { "
       "    name: 'im2col' "
       "    type: 'im2col' "
       "  } "
@@ -1672,15 +1654,6 @@ TEST_F(NetUpgradeTest, TestAllParams) {
       "  }"
       "  top: 'window_data' "
       "  top: 'window_label' "
-      "} "
-      "layers { "
-      "  name: 'hdf5data' "
-      "  type: HDF5_DATA "
-      "  hdf5_data_param { "
-      "    source: '/my/hdf5/data' "
-      "    batch_size: 256 "
-      "  } "
-      "  top: 'hdf5data' "
       "} "
       "layers { "
       "  name: 'conv1' "
@@ -1811,13 +1784,6 @@ TEST_F(NetUpgradeTest, TestAllParams) {
       "layers { "
       "  name: 'flatten' "
       "  type: FLATTEN "
-      "} "
-      "layers { "
-      "  name: 'hdf5_output' "
-      "  type: HDF5_OUTPUT "
-      "  hdf5_output_param { "
-      "    file_name: '/my/hdf5/output/file' "
-      "  } "
       "} "
       "layers { "
       "  name: 'im2col' "
@@ -2891,6 +2857,7 @@ TEST_F(NetUpgradeTest, TestImageNet) {
   this->RunV1UpgradeTest(expected_v1_proto, expected_v2_proto);
 }  // NOLINT(readability/fn_size)
 
+#if 0
 TEST_F(NetUpgradeTest, TestUpgradeV1LayerType) {
   LayerParameter layer_param;
   shared_ptr<Layer<float> > layer;
@@ -2925,6 +2892,7 @@ TEST_F(NetUpgradeTest, TestUpgradeV1LayerType) {
     EXPECT_EQ(v2_layer_type, layer->type());
   }
 }
+#endif
 
 class SolverTypeUpgradeTest : public ::testing::Test {
  protected:

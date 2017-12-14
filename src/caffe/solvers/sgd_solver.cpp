@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "caffe/sgd_solvers.hpp"
-#include "caffe/util/hdf5.hpp"
+// #include "caffe/util/hdf5.hpp"
 #include "caffe/util/io.hpp"
 #include "caffe/util/upgrade_proto.hpp"
 
@@ -244,16 +244,7 @@ void SGDSolver<Dtype>::ComputeUpdateValue(int param_id, Dtype rate) {
 
 template <typename Dtype>
 void SGDSolver<Dtype>::SnapshotSolverState(const string& model_filename) {
-  switch (this->param_.snapshot_format()) {
-    case caffe::SolverParameter_SnapshotFormat_BINARYPROTO:
-      SnapshotSolverStateToBinaryProto(model_filename);
-      break;
-    case caffe::SolverParameter_SnapshotFormat_HDF5:
-      SnapshotSolverStateToHDF5(model_filename);
-      break;
-    default:
-      LOG(FATAL) << "Unsupported snapshot format.";
-  }
+  SnapshotSolverStateToBinaryProto(model_filename);
 }
 
 template <typename Dtype>
@@ -275,6 +266,7 @@ void SGDSolver<Dtype>::SnapshotSolverStateToBinaryProto(
   WriteProtoToBinaryFile(state, snapshot_filename.c_str());
 }
 
+#if 0
 template <typename Dtype>
 void SGDSolver<Dtype>::SnapshotSolverStateToHDF5(
     const string& model_filename) {
@@ -300,6 +292,7 @@ void SGDSolver<Dtype>::SnapshotSolverStateToHDF5(
   H5Gclose(history_hid);
   H5Fclose(file_hid);
 }
+#endif
 
 template <typename Dtype>
 void SGDSolver<Dtype>::RestoreSolverStateFromBinaryProto(
@@ -321,6 +314,7 @@ void SGDSolver<Dtype>::RestoreSolverStateFromBinaryProto(
   }
 }
 
+#if 0
 template <typename Dtype>
 void SGDSolver<Dtype>::RestoreSolverStateFromHDF5(const string& state_file) {
   hid_t file_hid = H5Fopen(state_file.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
@@ -345,6 +339,7 @@ void SGDSolver<Dtype>::RestoreSolverStateFromHDF5(const string& state_file) {
   H5Gclose(history_hid);
   H5Fclose(file_hid);
 }
+#endif
 
 INSTANTIATE_CLASS(SGDSolver);
 REGISTER_SOLVER_CLASS(SGD);
